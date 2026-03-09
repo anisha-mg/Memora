@@ -1,7 +1,28 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ChatBox from '../components/ChatBox';
+import DataSourcePanel from '../components/DataSourcePanel';
 
 const Dashboard = () => {
+  const [isFetching, setIsFetching] = useState(false);
+  const [fetchHistory, setFetchHistory] = useState([]);
+
+  const handleFetchUpdate = (payload) => {
+    if (typeof payload.isLoading === 'boolean') {
+      setIsFetching(payload.isLoading);
+    }
+
+    if (payload.completed) {
+      const entry = {
+        id: Date.now(),
+        query: payload.query,
+        timestamp: payload.timestamp,
+        sources: payload.sources || [],
+        error: Boolean(payload.error),
+      };
+      setFetchHistory((prev) => [entry, ...prev].slice(0, 10));
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#dfe8ff] via-[#eef5ff] to-[#f4ecff] px-4 py-8 sm:px-6 lg:px-10">
       <div className="mx-auto grid min-h-[88vh] max-w-7xl grid-cols-1 items-center gap-10 lg:grid-cols-2">
@@ -46,9 +67,14 @@ const Dashboard = () => {
           <div className="mt-6 text-sm text-blue-900/70">Live status: Connected</div>
         </section>
 
-        <section className="mx-auto h-[78vh] w-full max-w-md lg:max-w-lg">
-          <div className="h-full rounded-[28px] border border-white/80 bg-white/70 p-2 shadow-2xl backdrop-blur">
-            <ChatBox />
+        <section className="mx-auto w-full max-w-6xl">
+          <div className="grid gap-4 xl:h-[78vh] xl:grid-cols-[minmax(350px,1.15fr)_minmax(260px,0.85fr)]">
+            <div className="h-[78vh] rounded-[28px] border border-white/80 bg-white/70 p-2 shadow-2xl backdrop-blur">
+              <ChatBox onFetchUpdate={handleFetchUpdate} />
+            </div>
+            <div className="h-[420px] xl:h-full">
+              <DataSourcePanel isLoading={isFetching} fetchHistory={fetchHistory} />
+            </div>
           </div>
         </section>
       </div>

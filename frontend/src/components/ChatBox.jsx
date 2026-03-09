@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import MessageBubble from './MessageBubble';
 
-const ChatBox = () => {
+const ChatBox = ({ onFetchUpdate }) => {
   const [messages, setMessages] = useState([
     {
       id: 1,
@@ -32,6 +32,7 @@ const ChatBox = () => {
     setMessages((prev) => [...prev, userMessage]);
     setInputValue('');
     setIsLoading(true);
+    onFetchUpdate?.({ isLoading: true });
 
     try {
       const response = await fetch('http://localhost:8000/ask', {
@@ -53,6 +54,13 @@ const ChatBox = () => {
       };
 
       setMessages((prev) => [...prev, aiMessage]);
+      onFetchUpdate?.({
+        isLoading: false,
+        completed: true,
+        query: messageText,
+        sources: data.sources || [],
+        timestamp: new Date().toISOString(),
+      });
     } catch (error) {
       console.error('Error:', error);
       const errorMessage = {
@@ -62,8 +70,17 @@ const ChatBox = () => {
         timestamp: new Date().toISOString(),
       };
       setMessages((prev) => [...prev, errorMessage]);
+      onFetchUpdate?.({
+        isLoading: false,
+        completed: true,
+        query: messageText,
+        sources: [],
+        error: true,
+        timestamp: new Date().toISOString(),
+      });
     } finally {
       setIsLoading(false);
+      onFetchUpdate?.({ isLoading: false });
     }
   };
 

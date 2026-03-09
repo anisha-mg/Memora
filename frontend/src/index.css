@@ -10,6 +10,39 @@
   .animation-delay-400 {
     animation-delay: 0.4s;
   }
+
+  .puppy-track {
+    position: relative;
+    overflow: hidden;
+    height: 44px;
+    border-radius: 9999px;
+    background: linear-gradient(90deg, #e2e8f0 0%, #f8fafc 100%);
+  }
+
+  .puppy-runner {
+    position: absolute;
+    left: -72px;
+    top: 2px;
+    animation: puppy-run 1.6s linear infinite;
+  }
+}
+
+@keyframes puppy-run {
+  0% {
+    transform: translateX(0) translateY(0);
+  }
+  25% {
+    transform: translateX(55px) translateY(-2px);
+  }
+  50% {
+    transform: translateX(110px) translateY(0);
+  }
+  75% {
+    transform: translateX(165px) translateY(-2px);
+  }
+  100% {
+    transform: translateX(240px) translateY(0);
+  }
 }
 
 /* Custom scrollbar */
