@@ -1,0 +1,219 @@
+{
+  "name": "Context-Aware Agent - Reminder Automation",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 1
+            }
+          ]
+        }
+      },
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [
+        250,
+        300
+      ],
+      "id": "schedule-trigger-1"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:8000/check-reminders",
+        "options": {}
+      },
+      "name": "Check Reminders",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        450,
+        300
+      ],
+      "id": "http-request-1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [
+            {
+              "value1": "={{ $json.count }}",
+              "operation": "larger",
+              "value2": 0
+            }
+          ]
+        }
+      },
+      "name": "Has Reminders?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        650,
+        300
+      ],
+      "id": "if-node-1"
+    },
+    {
+      "parameters": {
+        "functionCode": "// Process each reminder\nconst reminders = items[0].json.reminders;\nconst processedReminders = [];\n\nfor (const reminder of reminders) {\n  processedReminders.push({\n    json: {\n      event: reminder.event,\n      date: reminder.date,\n      time: reminder.time,\n      message: reminder.message,\n      hours_until: reminder.hours_until\n    }\n  });\n}\n\nreturn processedReminders;"
+      },
+      "name": "Process Reminders",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        850,
+        200
+      ],
+      "id": "function-node-1"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:8000/reminder",
+        "options": {},
+        "bodyParametersUi": {
+          "parameter": [
+            {
+              "name": "event_name",
+              "value": "={{ $json.event }}"
+            },
+            {
+              "name": "event_date",
+              "value": "={{ $json.date }}"
+            },
+            {
+              "name": "event_time",
+              "value": "={{ $json.time }}"
+            },
+            {
+              "name": "details",
+              "value": "Automatic reminder from n8n workflow"
+            }
+          ]
+        }
+      },
+      "name": "Send Reminder",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        1050,
+        200
+      ],
+      "id": "http-request-2"
+    },
+    {
+      "parameters": {
+        "content": "## Context-Aware Agent - Reminder Workflow\n\n**Purpose:** Automatically check for upcoming events and send reminders\n\n**Frequency:** Every hour\n\n**Process:**\n1. Check backend for upcoming events (within 24 hours)\n2. If reminders found, process each one\n3. Send reminder notification via API\n4. Log results\n\n**Configuration:**\n- Backend URL: http://localhost:8000\n- Check interval: 1 hour\n- Reminder window: 24 hours\n\n**Setup Instructions:**\n1. Import this workflow into n8n\n2. Ensure backend server is running\n3. Activate the workflow\n4. Monitor execution logs",
+        "height": 400,
+        "width": 350
+      },
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        140,
+        480
+      ],
+      "id": "sticky-note-1"
+    },
+    {
+      "parameters": {
+        "mode": "logToConsole",
+        "message": "=Processed {{ $json.reminders.length }} reminders"
+      },
+      "name": "Log Results",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        1250,
+        200
+      ],
+      "id": "log-node-1"
+    },
+    {
+      "parameters": {
+        "mode": "logToConsole",
+        "message": "No reminders to send at this time"
+      },
+      "name": "Log No Reminders",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        850,
+        400
+      ],
+      "id": "log-node-2"
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Check Reminders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Reminders": {
+      "main": [
+        [
+          {
+            "node": "Has Reminders?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Reminders?": {
+      "main": [
+        [
+          {
+            "node": "Process Reminders",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Log No Reminders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Process Reminders": {
+      "main": [
+        [
+          {
+            "node": "Send Reminder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Reminder": {
+      "main": [
+        [
+          {
+            "node": "Log Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {},
+  "staticData": null,
+  "tags": [],
+  "pinData": {},
+  "versionId": "1.0.0"
+}

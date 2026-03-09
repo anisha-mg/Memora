@@ -1,0 +1,87 @@
+Subject: Event Logistics Planning
+
+Dear Team,
+
+We have finalized the logistics for the upcoming conference event.
+
+Key Decisions:
+- Venue: City Convention Hall
+- Date: March 12, 2026
+- Time: 10:00 AM
+
+Transportation:
+We decided that two buses will be arranged for transportation.
+The buses will depart from the main office at 8:30 AM.
+
+Catering:
+Catering will be handled by ABC Caterers.
+Menu includes:
+- Continental breakfast
+- Buffet lunch
+- Coffee and refreshments throughout the day
+
+Budget approved: $15,000
+
+Please confirm your attendance by replying to this email.
+
+Best regards,
+Event Coordinator
+
+---
+
+Subject: Team Review Meeting Minutes
+
+Date: March 8, 2026
+
+Attendees: John, Sarah, Mike, Lisa
+
+Agenda Items Discussed:
+
+1. Project Timeline
+   - Phase 1 completion on track
+   - Phase 2 to begin next week
+
+2. Resource Allocation
+   - Additional developer needed for frontend
+   - Design team at full capacity
+
+3. Budget Review
+   - Q1 spending within limits
+   - Request for additional marketing budget approved
+
+4. Next Steps
+   - Team review meeting scheduled for March 15, 2026 at 2:00 PM
+   - Prepare presentations for stakeholder review
+
+Action Items:
+- John: Finalize design mockups by March 10
+- Sarah: Update project timeline
+- Mike: Prepare budget report
+- Lisa: Coordinate with marketing team
+
+---
+
+Subject: Important Venue Confirmation
+
+Hi Team,
+
+This is to confirm that City Convention Hall has been booked for our event.
+
+Venue Details:
+- Address: 123 Main Street, Downtown
+- Capacity: 500 people
+- Parking: Available on-site for 200 vehicles
+- AV Equipment: Full setup included
+- Wifi: High-speed internet available
+
+The venue coordinator is Jane Smith.
+Contact: jane.smith@conventionhall.com
+Phone: (555) 123-4567
+
+Security arrangements have been confirmed.
+Accessibility requirements have been met.
+
+Looking forward to a successful event!
+
+Best,
+Logistics Team

@@ -1,0 +1,28 @@
+# FastAPI and server
+fastapi==0.109.0
+uvicorn[standard]==0.27.0
+pydantic==2.6.0
+python-multipart==0.0.6
+
+# OpenAI and LangChain
+openai==1.12.0
+langchain==0.1.6
+langchain-openai==0.0.5
+
+# Vector database
+faiss-cpu==1.13.2
+# For GPU support, use: faiss-gpu==1.13.2
+
+# Document processing
+PyPDF2==3.0.1
+pandas==2.1.4
+numpy==1.26.4
+
+# Utilities
+python-dotenv==1.0.1
+
+# For PDF generation (optional)
+reportlab==4.0.9
+
+# CORS
+python-jose[cryptography]==3.3.0
