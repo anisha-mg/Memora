@@ -1,0 +1,274 @@
+{
+  "name": "My workflow 3",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "7485cbfb-97dd-48b0-8fbd-6c1cd40544b0",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -160,
+        -128
+      ],
+      "id": "be1de89c-947a-408c-b539-a510e27f884d",
+      "name": "Webhook",
+      "webhookId": "7485cbfb-97dd-48b0-8fbd-6c1cd40544b0"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "# ROLE# ROLE\nYou are a High-Precision Data Retrieval Engine. You do not engage in conversation. You only return facts from tools.\n\n# EXECUTION LOGIC\n- If message contains \"mail\" or a sender name (e.g., \"n8n\", \"Unstop\"): IMMEDIATELY call the Gmail tool. Search for that name.\n- If message contains \"budget\" or \"event\": IMMEDIATELY call the Google Sheets tool.\n- If message contains \"download\" or \"file\": IMMEDIATELY call the Google Drive tool.\n\n# STRICT RULES\n- NEVER ask for clarification or more information. \n- NEVER say \"I understand\" or \"How can I help?\".\n- IF a tool returns multiple items, return only the most recent one.\n- IF no data is found, output: \"[Subject] not found.\"\nYou are a High-Precision Data Retrieval Engine. Your ONLY task is to return data found in your tools.\n\n# EXECUTION PROTOCOL\n1. KEYWORD DETECTION:\n   - \"mail\", \"sender\", \"unstop\", \"n8n\" -> Call Gmail Tool IMMEDIATELY.\n   - \"budget\", \"event\", \"logistics\" -> Call Google Sheets Tool IMMEDIATELY.\n2. SEARCH LOGIC:\n   - If user asks for \"n8n\", search Gmail specifically for \"n8n\".\n   - If user asks for \"unstop\", search Gmail specifically for \"unstop\".\n3. OUTPUT FORMAT:\n   - Provide ONLY the direct answer (e.g., \"The budget is ₹25,000\" or \"Latest Subject: [Subject]\").\n   - If no data matches the specific sender/subject, say: \"[Subject] data not found.\"\n\n# ABSOLUTE BANS\n- DO NOT say \"I understand\" or \"How can I help you?\".\n- DO NOT explain which tool you are calling.\n- DO NOT return general knowledge if a tool fails; return an error instead.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        192,
+        -128
+      ],
+      "id": "20c7dab3-f1bc-4e0d-b237-260801124420",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash-lite",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        64,
+        96
+      ],
+      "id": "f7068c44-8bba-4c44-9010-db8feeb76b17",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "hHoipJUUPM0IfLZl",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        880,
+        -128
+      ],
+      "id": "87222738-9478-4079-983e-72de9a05e14c",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1eaJj27INrEjI5H8Ogc2qXLnE4h5gbWtkcPyIp16W3hY",
+          "mode": "list",
+          "cachedResultName": "event_data_dummy",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1eaJj27INrEjI5H8Ogc2qXLnE4h5gbWtkcPyIp16W3hY/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1848052919,
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1eaJj27INrEjI5H8Ogc2qXLnE4h5gbWtkcPyIp16W3hY/edit#gid=1848052919"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        192,
+        96
+      ],
+      "id": "0f6682b4-7a07-4ce0-b67d-1c9e9082da39",
+      "name": "Get row(s) in sheet in Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "3VBFvvpCRe72dLd4",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "limit": 7,
+        "filters": {}
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.2,
+      "position": [
+        320,
+        96
+      ],
+      "id": "65da1e17-476a-4694-be31-31cc6bd016b0",
+      "name": "Get many messages in Gmail",
+      "webhookId": "eb585462-194b-4bf7-bd82-9ce929be964b",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "Wea11sQADVplAQgF",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "1l9Mdbh3AjIeSilvGh12zdG3aTthSi5Bg",
+          "mode": "list",
+          "cachedResultName": "event_plan_dummy.pdf",
+          "cachedResultUrl": "https://drive.google.com/file/d/1l9Mdbh3AjIeSilvGh12zdG3aTthSi5Bg/view?usp=drivesdk"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDriveTool",
+      "typeVersion": 3,
+      "position": [
+        448,
+        96
+      ],
+      "id": "23dbffd5-74c9-4e92-a834-71cc4eea587f",
+      "name": "Download file in Google Drive",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "y233X2aq75SxLobv",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1",
+              "name": "response",
+              "value": "={{ $json.output }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "84fffff4-07a9-4683-bd8e-e41b089b482e",
+      "name": "Clear Output",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        656,
+        -128
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Clear Output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet in Google Sheets": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many messages in Gmail": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download file in Google Drive": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Respond to Webhook": {
+      "main": [
+        []
+      ]
+    },
+    "Clear Output": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "4e5717ce-d843-4173-8687-f1a1e48de1df",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "1a993fc599074aa7aaea1ab3026a6b0d3f5f795e18dc0332f5fcdeb67f8cee13"
+  },
+  "id": "v4fFRnl8LPPj85Rh",
+  "tags": []
+}
